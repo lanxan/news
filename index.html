@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script src="https://fb.me/react-0.13.3.js"></script>
+        <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+    </head>
+    <body>
+        <div id="title">每日頭條</div>
+        <div id="content"></div>
+        <script type="text/jsx">
+var data = [
+    {editor: "apple"},
+    {editor: "china"}
+];
+
+var NewsBox = React.createClass({
+    render: function(){
+        return (
+            <div className="newsBox"> 
+                <NewsTitle editor={this.props.data}>The editor.</NewsTitle>
+                <NewsContent />
+                <NewsComment />
+            </div>
+        );
+    }
+});
+
+var NewsContent = React.createClass({
+    render: function(){
+        return (
+            <div className="newsContent">
+                Content.
+            </div>
+        );
+    }
+});
+
+
+var NewsTitle = React.createClass({
+    render: function(){
+        return (
+            <div className="newsTitle">
+                {this.props.editor}時報
+            </div>    
+        );
+    }
+});
+
+var NewsComment = React.createClass({
+    render: function(){
+        return (
+            <div className="newsComment">
+                This is comments.
+            </div>
+        );
+    }
+});
+/*
+var newsNodes = data.map(function(data) {
+    return (
+        <NewsBox data={data.editor} />
+    );
+});*/
+
+React.render(
+    <NewsBox data={data.editor} />,
+    document.getElementById('content')
+);
+        </script>
+    </body>
+</html>    
