@@ -5,24 +5,26 @@
         <script src="https://fb.me/react-0.13.3.js"></script>
         <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
 		<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/news.css">
     </head>
     <body>
         <div id="title">每日頭條</div>
         <div id="content"></div>
         <script type="text/jsx">
+"use strict";
 var data = [
-	{publisher : "apple"},
-	{publisher : "china"},
-	{publisher : "free"}
+	{publisher : "apple", comments : [{author : "lanxna", comment : "the test."}]},
+	{publisher : "china", comments : [{author : "lanxna", comment : "the test."}]},
+	{publisher : "free", comments : [{author : "lanxna", comment : "the test."}]}
 ];
 
 var NewsContainer = React.createClass({
 	render: function(){
 		return (
-			<div className="newsContainer">
+			<div id="newsContainer">
 				{this.props.data.map(function(news) {
 					return [
-						<NewsBox key={news.publisher} data={news} />,
+						<NewsBox key={news.publisher} id={news.publisher} comments={news.comments} />,
 						<br />
 					];
 				})}
@@ -44,17 +46,19 @@ var NewsBox = React.createClass({/*
 				console.error(this.props.url, status, err.toString());
 			}.bind(this)
 		});
-	},
+	},*/
 	getInitialState: function(){
-		return {data: []};
+		return {comments: this.props.comments};
 	},
+	/*
 	componentDidMount: function(){
 		this.loadNewsPaperPublisherFromServers();
 		setInterval(this.loadNewsPaperPublisherFromServers, this.props.pollInterval);
 	},*/
 	handleCommentSubmit: function(comment) {
-		// TODO: submit to the server and refresh the list
-		console.log(comment);
+		var comments = this.state.comments;
+		var newComments = comments.concat([comment]);
+		this.setState({comments: newComments});
 		/*
 		$.ajax({
 			url: this.props.url,
@@ -71,67 +75,71 @@ var NewsBox = React.createClass({/*
 	},
     render: function(){
         return (
-            <div className="newsBox" id={this.props.data.publisher}>
-				<NewsTitle editor={this.props.data.publisher} >The editor.</NewsTitle>
+            <div className="newsBox">
+				<NewsTitle editor={this.props.id} >The editor.</NewsTitle>
                 <NewsContent />
-                <NewsComment />
+                <NewsComments comments={this.state.comments}/>
 				<NewsCommentForm onCommentSubmit={this.handleCommentSubmit}/>
             </div>
         );
     }
 });
 
-var NewsContent = React.createClass({
-    render: function(){
+class NewsContent extends React.Component{
+	render() {
         return (
             <div className="newsContent">
                 Content.
             </div>
         );
-    }
-});
+	}
+}
 
-
-var NewsTitle = React.createClass({
-    render: function(){
+class NewsTitle extends React.Component{
+    render() {
         return (
             <div className="newsTitle">
                 {this.props.editor}時報
             </div>    
         );
     }
-});
+};
 
-var NewsComment = React.createClass({
-    render: function(){
-        return (
-            <div className="newsComment">
-                This is comments.
+class NewsComments extends React.Component{
+    render() {
+		return (
+            <div className="newsComments">
+				{this.props.comments.map(function(comment) {
+					return [
+						<span>{comment.author} : {comment.comment}</span>,
+						<br />
+					];
+				})}
             </div>
         );
     }
-});
+};
 
 var NewsCommentForm = React.createClass({
 	handleSubmit: function(e){
 		e.preventDefault();
 		var author = React.findDOMNode(this.refs.author).value.trim();
-		var text = React.findDOMNode(this.refs.text).value.trim();
-		if( !text || !author) {
+		var comment = React.findDOMNode(this.refs.comment).value.trim();
+		if( !comment || !author) {
 			return;
 		}
-		//send reque
-		this.props.onCommentSubmit({author: author, text: text});
+		//send request
+		this.props.onCommentSubmit({author: author, comment: comment});
 
 		React.findDOMNode(this.refs.author).value = '';
-		React.findDOMNode(this.refs.text).value = '';
+		React.findDOMNode(this.refs.comment).value = '';
 		return;
 	},
 	render: function(){
 		return (
 			<form onSubmit={this.handleSubmit}>
 				<input type="text" placeholder="Your name" ref="author" /><br />
-				<input type="text" placeholder="Your comment" ref="text" /><br />
+				<input type="text" placeholder="Your comment" ref="comment" /><br />
 				<input type="submit" value="post" />
 			</form>
 		)
@@ -140,7 +148,7 @@ var NewsCommentForm = React.createClass({
 
 React.render(
     <NewsContainer data={data} url="data/news.json" pollInterval={2000}/>,
-    document.getElementById('content')
+	document.getElementById('content')
 );
         </script>
     </body>
