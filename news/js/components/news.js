@@ -7,7 +7,7 @@ var data = [
 ];
 
 var NewsContainer = React.createClass({
-	loadNewsPaperPublisherFromServers: function(){
+	loadNewsPublisherFromServers: function(){
 		$.ajax({
 			url: this.props.url,
 			dataType: 'json',
@@ -16,16 +16,17 @@ var NewsContainer = React.createClass({
 				this.setState({data: data});
 			}.bind(this),
 			error: function(xhr, status, err){
-				console.error(this.props.url, status, err.toString());
-			}.bind(this)
+				console.log(status, err);
+				//console.log(this.props.url + ',' + status);
+				//console.log(err.toString());
+			}
 		});
 	},
 	getInitialState: function(){
-		//return {comments: this.props.comments};
-		return {data: data};
+		return {data: []};
 	},
 	componentDidMount: function(){
-		this.loadNewsPaperPublisherFromServers();
+		this.loadNewsPublisherFromServers();
 		//setInterval(this.loadNewsPaperPublisherFromServers, this.props.pollInterval);
 	},
 	render: function(){
@@ -140,6 +141,6 @@ class NewsCommentForm extends React.Component{
 }
 
 React.render(
-    <NewsContainer data={data} url="js/store/data.json" pollInterval={2000}/>,
+    <NewsContainer /*url="get.js"*/ url="js/store/data.json" pollInterval={2000}/>,
 	document.getElementById('content')
 );
