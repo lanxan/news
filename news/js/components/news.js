@@ -13,6 +13,9 @@ var NewsContainer = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function(data){
+				
+				console.log(data);
+
 				this.setState({data: data});
 			}.bind(this),
 			error: function(xhr, status, err){
@@ -46,22 +49,24 @@ var NewsContainer = React.createClass({
 var NewsBox = React.createClass({
 
 	handleCommentSubmit: function(comment) {
+		//Optimization
 		var comments = this.state.comments;
 		var newComments = comments.concat([comment]);
 		this.setState({comments: newComments});
-		/*
+		var jsonString = JSON.stringify({publisher : this.props.id, comment : comment});
+
 		$.ajax({
-			url: this.props.url,
+			url: '../ajax/insertComment',
 			dataType: 'json',
 			type: 'POST',
-			data: comment,
+			data: {jsonData : jsonString},
 			success: function(data) {
-				this.setState({data: data});
+				//this.setState({comments: data});
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.error(this.props.url, status, err.toString());
 			}.bind(this)
-		});*/
+		});
 	},
 	getInitialState: function(){
 		return {comments: this.props.comments};
@@ -141,6 +146,6 @@ class NewsCommentForm extends React.Component{
 }
 
 React.render(
-    <NewsContainer /*url="get.js"*/ url="js/store/data.json" pollInterval={2000}/>,
+    <NewsContainer url="../ajax/getComments" /*url="js/store/data.json"*/ pollInterval={2000}/>,
 	document.getElementById('content')
 );

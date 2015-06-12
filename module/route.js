@@ -1,11 +1,13 @@
 
 var fs = require('fs');
 var qs = require('querystring');
+var url = require('url');
 
-//var server = require('serverRoute');
+var db = require('../ajax/action');
 
 function load_static_file(uri, res){
 	var filename = '.'+uri;
+	
 	fs.exists(filename, function(exists){
 		if(!exists){
 			res.writeHead(404, {'Content-Type' : 'text/plain'});
@@ -45,19 +47,21 @@ function load_static_file(uri, res){
 	});
 }
 
-function route(req, res, pathname) {
+function route(req, res) {
 	
 	var dirname = '.';
-	if(pathname.indexOf('/public/') == -1){
+	var pathname = url.parse(req.url).pathname;
+
+	if(pathname.indexOf('/news/') != -1){
 		load_static_file(pathname, res);
 	} else {
 		if(pathname.indexOf('/ajax/') != -1) {
-			var param;
-			  
+
 			if (req.method == 'POST') {
 				var body = '';
 				req.on('data', function (data) {
 					body += data;
+
 					// 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
 					if (body.length > 1e6) { 
 					// FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
@@ -65,13 +69,21 @@ function route(req, res, pathname) {
 					}
 				});
 				req.on('end', function () {
-					//var POST = qs.parse(body);
-					param = qs.parse(body);
+					var POST = JSON.parse( qs.parse(body).jsonData );
+					
+					if(pathname.indexOf('insertComment') != -1){
+						db.insertComment(res, POST);
+					}
 				});
 			}
-
+			
 			res.writeHead(200, {'Content-Type' : 'application/json; charset=utf-8'});
-			res.end(server.route(pathname, param));
+			
+			if(pathname.indexOf('getComments') != -1) {
+				db.getComments(res);
+			} else {
+				res.end("Error");
+			}
 		}
 	}
 }
