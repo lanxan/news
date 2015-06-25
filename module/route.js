@@ -34,6 +34,12 @@ function load_static_file(uri, res){
 				header = {'Content-Type' : 'text/css'};
 		  	} else if(filename.indexOf('.json') != -1) {
 				header = {'Content-Type' : 'application/json; charset=utf-8'};
+		  	} else if(filename.indexOf('.jpg') != -1) {
+				header = {'Content-Type' : 'image/jpeg'};
+		  	} else if(filename.indexOf('.png') != -1) {
+				header = {'Content-Type' : 'image/png'};
+		  	} else if(filename.indexOf('.gif') != -1) {
+				header = {'Content-Type' : 'image/gif'};
 		  	} else if(filename.indexOf('/favionc.ico') != -1) {
 				header = {'Content-Type': 'image/x-icon'};
 			} else {

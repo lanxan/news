@@ -13,15 +13,10 @@ var NewsContainer = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function(data){
-				
-				console.log(data);
-
 				this.setState({data: data});
 			}.bind(this),
 			error: function(xhr, status, err){
 				console.log(status, err);
-				//console.log(this.props.url + ',' + status);
-				//console.log(err.toString());
 			}
 		});
 	},
@@ -37,7 +32,7 @@ var NewsContainer = React.createClass({
 			<div id="newsContainer">
 				{this.state.data.map(function(news) {
 					return [
-						<NewsBox key={news.publisher} id={news.publisher} comments={news.comments} />,
+						<NewsBox key={news.publisher} id={news.publisher} link={news.link} title={news.title} comments={news.comments} />,
 						<br />
 					];
 				})}
@@ -60,12 +55,13 @@ var NewsBox = React.createClass({
 			dataType: 'json',
 			type: 'POST',
 			data: {jsonData : jsonString},
-			success: function(data) {
+			success: function() {
+				console.log('ok');
 				//this.setState({comments: data});
 			}.bind(this),
 			error: function(xhr, status, err) {
-				console.error(this.props.url, status, err.toString());
-			}.bind(this)
+				console.error(status, err);
+			}
 		});
 	},
 	getInitialState: function(){
@@ -74,8 +70,8 @@ var NewsBox = React.createClass({
     render: function(){
         return (
             <div className="newsBox">
-				<NewsTitle editor={this.props.id} >The editor.</NewsTitle>
-                <NewsContent />
+				<NewsTitle id={this.props.id} title={this.props.title}>The editor.</NewsTitle>
+                <NewsContent id={this.props.id} link={this.props.link}/>
                 <NewsComments comments={this.state.comments}/>
 				<NewsCommentForm onCommentSubmit={this.handleCommentSubmit}/>
             </div>
@@ -83,24 +79,24 @@ var NewsBox = React.createClass({
     }
 });
 
-class NewsContent extends React.Component{
-	render() {
-        return (
-            <div className="newsContent">
-                Content.
-            </div>
-        );
-	}
-}
-
 class NewsTitle extends React.Component{
     render() {
         return (
             <div className="newsTitle">
-                {this.props.editor}時報
+                {this.props.id}時報 - {this.props.title}
             </div>    
         );
     }
+}
+
+class NewsContent extends React.Component{
+	render() {
+        return (
+            <div className="newsContent">
+                <img src={"image/20150625-"+this.props.id+".jpg"} width = "600px" height = "400px" />
+            </div>
+        );
+	}
 }
 
 class NewsComments extends React.Component{
