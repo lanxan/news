@@ -1,10 +1,14 @@
 "use strict";
 
-var data = [
-	{publisher : "apple", comments : [{author : "lanxna", comment : "the test."}]},
-	{publisher : "china", comments : [{author : "lanxna", comment : "the test."}]},
-	{publisher : "free", comments : [{author : "lanxna", comment : "the test."}]}
-];
+//css inline style
+var style = {
+	apple : {
+		background : '#F3F781',
+	},
+	china : {
+		background : '#58D3F7',
+	}
+}
 
 var NewsContainer = React.createClass({
 	loadNewsPublisherFromServers: function(){
@@ -33,7 +37,6 @@ var NewsContainer = React.createClass({
 				{this.state.data.map(function(news) {
 					return [
 						<NewsBox key={news.publisher} id={news.publisher} link={news.link} title={news.title} comments={news.comments} />,
-						<br />
 					];
 				})}
 			</div>
@@ -41,49 +44,51 @@ var NewsContainer = React.createClass({
 	}
 });
 
-var NewsBox = React.createClass({
+class NewsBox extends React.Component{
+	
+	constructor (props) {
+		super(props);
+		this.state = {comments: this.props.comments};
+	}
 
-	handleCommentSubmit: function(comment) {
+	handleCommentSubmit (comment) {
 		//Optimization
 		var comments = this.state.comments;
 		var newComments = comments.concat([comment]);
-		this.setState({comments: newComments});
 		var jsonString = JSON.stringify({publisher : this.props.id, comment : comment});
+
+		this.setState({comments: newComments});
 
 		$.ajax({
 			url: '../ajax/insertComment',
 			dataType: 'json',
 			type: 'POST',
 			data: {jsonData : jsonString},
-			success: function() {
-				console.log('ok');
+			success: function(data) {
 				//this.setState({comments: data});
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.error(status, err);
 			}
 		});
-	},
-	getInitialState: function(){
-		return {comments: this.props.comments};
-	},
-    render: function(){
+	}
+    render () {
         return (
-            <div className="newsBox">
-				<NewsTitle id={this.props.id} title={this.props.title}>The editor.</NewsTitle>
-                <NewsContent id={this.props.id} link={this.props.link}/>
-                <NewsComments comments={this.state.comments}/>
-				<NewsCommentForm onCommentSubmit={this.handleCommentSubmit}/>
+            <div className="newsBox news">
+				<NewsTitle id={this.props.id} title={this.props.title} link={this.props.link}>The editor.</NewsTitle>
+				<NewsContent id={this.props.id} link={this.props.link} />
+                <NewsComments comments={this.state.comments} />
+				<NewsCommentForm onCommentSubmit={this.handleCommentSubmit} />
             </div>
         );
     }
-});
+}
 
 class NewsTitle extends React.Component{
     render() {
         return (
-            <div className="newsTitle">
-                {this.props.id}時報 - {this.props.title}
+            <div className="newsTitle news">
+                <a href={this.props.link} target="_blank"><span>{this.props.id}時報 - {this.props.title}</span></a>
             </div>    
         );
     }
@@ -91,9 +96,10 @@ class NewsTitle extends React.Component{
 
 class NewsContent extends React.Component{
 	render() {
+		var contentStyle = (this.props.id == 'china') ? style.china : style.apple;
         return (
-            <div className="newsContent">
-                <img src={"image/20150625-"+this.props.id+".jpg"} width = "600px" height = "400px" />
+            <div className="newsContent news" id={this.props.id} style={contentStyle}>
+                <a href={this.props.link} target="_blank"><img src={"image/20150625-"+this.props.id+".jpg"} width = "595px" height = "400px" /></a>
             </div>
         );
 	}
@@ -102,7 +108,7 @@ class NewsContent extends React.Component{
 class NewsComments extends React.Component{
     render() {
 		return (
-            <div className="newsComments">
+            <div className="newsComments news">
 				{this.props.comments.map(function(comment) {
 					return [
 						<span>{comment.author} : {comment.comment}</span>,
@@ -132,7 +138,7 @@ class NewsCommentForm extends React.Component{
 	
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit.bind(this)}>
+			<form className="news" onSubmit={this.handleSubmit.bind(this)}>
 				<input type="text" placeholder="Your name" ref="author" /><br />
 				<input type="text" placeholder="Your comment" ref="comment" /><br />
 				<input type="submit" value="post" />

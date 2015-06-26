@@ -1,12 +1,23 @@
 
 #newsContainer {
-	width: 0px;
-	height: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+#title {
+	margin: 5px;
+}
+
+.news {
+	margin: 5px;
 }
 
 .newsBox {
 	float: left;
-	width: 300px;
-	height: 160px;
-	margin: 5px;
+	width: 45%;
+	height: 100%;
+}
+
+.newsContent {
+	padding : 5px;
 }

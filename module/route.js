@@ -81,14 +81,13 @@ function route(req, res) {
 						db.insertComment(res, POST);
 					}
 				});
-			}
-			
-			res.writeHead(200, {'Content-Type' : 'application/json; charset=utf-8'});
-			
-			if(pathname.indexOf('getComments') != -1) {
-				db.getComments(res);
 			} else {
-				res.end("Error");
+			
+				if(pathname.indexOf('getComments') != -1) {
+					db.getComments(res);
+				} else {
+					res.end("Error");
+				}
 			}
 		}
 	}
