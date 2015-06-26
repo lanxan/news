@@ -148,6 +148,6 @@ class NewsCommentForm extends React.Component{
 }
 
 React.render(
-    <NewsContainer url="../ajax/getComments" /*url="js/store/data.json"*/ pollInterval={2000}/>,
+    <NewsContainer url="../ajax/getComments" />,
 	document.getElementById('content')
 );
