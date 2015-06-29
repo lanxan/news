@@ -99,7 +99,7 @@ class NewsContent extends React.Component{
 		var contentStyle = (this.props.id == 'china') ? style.china : style.apple;
         return (
             <div className="newsContent news" id={this.props.id} style={contentStyle}>
-                <a href={this.props.link} target="_blank"><img src={"image/20150625-"+this.props.id+".jpg"} width = "595px" height = "400px" /></a>
+                <a href={this.props.link} target="_blank"><img src={"image/20150625-"+this.props.id+".jpg"} width = "100%" height = "100%" /></a>
             </div>
         );
 	}
