@@ -1,10 +1,16 @@
 # news
-  This is a demo website for React + Nodejs + mongodb.
+  This is a demo website for React + Nodejs + MongoDB.
+  
+  [React](https://github.com/facebook/react) is a Facebook open source project.
+  
+  [Nodejs](https://github.com/joyent/node) is an event based server.
+  
+  [MongoDB](https://github.com/mongodb/mongo) is a noSQL database.
 
 ## Install
-  - nodejs 
+  - Nodejs 
     - [nodejs download page](https://nodejs.org/download/)
-  - mongodb 
+  - MongoDB 
     - [install mongodb on mac](https://mongodb.github.io/node-mongodb-native/api-articles/nodekoarticle1.html)
 
 ## Run
