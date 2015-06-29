@@ -75,10 +75,10 @@ class NewsBox extends React.Component{
     render () {
         return (
             <div className="newsBox news">
-				<NewsTitle id={this.props.id} title={this.props.title} link={this.props.link}>The editor.</NewsTitle>
-				<NewsContent id={this.props.id} link={this.props.link} />
+		<NewsTitle id={this.props.id} title={this.props.title} link={this.props.link}>The editor.</NewsTitle>
+		<NewsContent id={this.props.id} link={this.props.link} />
                 <NewsComments comments={this.state.comments} />
-				<NewsCommentForm onCommentSubmit={this.handleCommentSubmit} />
+		<NewsCommentForm onCommentSubmit={this.handleCommentSubmit} />
             </div>
         );
     }
@@ -107,14 +107,14 @@ class NewsContent extends React.Component{
 
 class NewsComments extends React.Component{
     render() {
-		return (
+	return (
             <div className="newsComments news">
-				{this.props.comments.map(function(comment) {
-					return [
-						<span>{comment.author} : {comment.comment}</span>,
-						<br />
-					];
-				})}
+		{this.props.comments.map(function(comment) {
+			return [
+				<span>{comment.author} : {comment.comment}</span>,
+				<br />
+			];
+		})}
             </div>
         );
     }
@@ -148,6 +148,6 @@ class NewsCommentForm extends React.Component{
 }
 
 React.render(
-    <NewsContainer url="../ajax/getComments" />,
+    	<NewsContainer url="../ajax/getComments" />,
 	document.getElementById('content')
 );
