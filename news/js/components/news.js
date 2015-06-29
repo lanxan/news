@@ -148,6 +148,6 @@ class NewsCommentForm extends React.Component{
 }
 
 React.render(
-    <NewsContainer url="../ajax/getComments" />,
+    	<NewsContainer url="../ajax/getComments" />,
 	document.getElementById('content')
 );
