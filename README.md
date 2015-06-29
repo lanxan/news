@@ -1,11 +1,23 @@
 # news
   This is a demo website for React + Nodejs + mongodb.
 
-## Need
+## Install
   - nodejs 
-  - mongodb
+    - [nodejs download page](https://nodejs.org/download/)
+  - mongodb 
+    - [install mongodb on mac](https://mongodb.github.io/node-mongodb-native/api-articles/nodekoarticle1.html)
 
 ## Run
+  
+  After install nodejs and mongodb, run mongodb first.
+  
+    mongod --config /usr/local/etc/mongod.conf --fork
+  
+  Second, run initialDB.js.
+  
+    node initialDB.js
+  
+  Finally, open server.
   
     node server.js
   
